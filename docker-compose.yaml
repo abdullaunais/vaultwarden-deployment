@@ -1,0 +1,25 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    environment:
+      DOMAIN: "https://192.168.0.82"
+    volumes:
+      - ./vw-data/:/data/
+    ports:
+      - "8080:80"
+
+  nginx:
+    image: unais/static-nginx:latest
+    build:
+      context: .
+      dockerfile: .dockerfile
+    container_name: nginx
+    restart: unless-stopped
+    #    volumes:
+    #      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "443:443"
+    depends_on:
+      - vaultwarden
